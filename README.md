@@ -58,39 +58,45 @@ ou valores?
     da data e também nas transações onde as datas não estavam sendo informadas o valor estava editado como 1000,
     o que faz parecer que é uma informação errada, tendo em vista a repetição desse mesmo valor em varias movimentações.
 
-======================================================================================================
--------------------------------------- QUESTÕES DE CÓDIGO --------------------------------------------
-======================================================================================================
+
+QUESTÕES DE CÓDIGO
+
 
 K (código) – Qual a soma total das movimentações utilizando o CPGF?
+
     R: R$ 5.619.007,95
     
 ![valorTotal](https://user-images.githubusercontent.com/76000194/150594203-d9dd53bf-2337-4b6a-a262-5f3b46e2e1e2.jpg)
 
 L (código) – Qual a soma das movimentações sigilosas ?
+
     R: R$ 3.108.731,15
     
 ![valorTotalSigilosas](https://user-images.githubusercontent.com/76000194/150594233-2d39af98-ce50-4084-94d8-8c232b891c6b.jpg)
 
 M (código) – Qual o Órgão que mais realizou movimentações sigilosas no período e qual o
 valor (somado)?
+
     R: Departamento de Policia Federal
     
 ![valorTotalSigilosasOrgao](https://user-images.githubusercontent.com/76000194/150594370-0dd51e95-640b-401f-bd2a-289576d8774e.jpg)
 
 N (código) – Qual o nome do portador que mais realizou saques no período? Qual a soma
 dos saques realizada por ele? Qual o nome do Órgão desse portador?
+
     R: Rafael Ferreira realizou 25 saques, órgão Instituto Chico Mendes
     
 ![valorTotalSaquesPortador](https://user-images.githubusercontent.com/76000194/150594673-250c57a6-64c6-4c6c-9d3a-4266d8f80f5f.jpg)
 
 O (código) – Qual o nome do favorecido que mais recebeu compras realizadas utilizando o
 CPGF?
+
     R: MercadoPago, 123 compras.
     
 ![valorTotalFavorecidos](https://user-images.githubusercontent.com/76000194/150595751-454a6d20-4a16-431c-81db-b99270e74782.jpg)
 
 P - Descreva qual a abordagem utilizada para desenvolver o código para os ítens de K a O.
+
     R: Utilizei a linguagem de programação Java para desenvolver um programa Desktop que automatiza a leitura do arquivo em formato csv que contém
     as informações de uso do cartão CPGF e também automatiza as respostas para as perguntas de K a O por meio de uma interface gráfica de facil utilização.
     Utilizei o método de conexão JDBC com o banco de dados MySQL, para assim poder guardar os dados obtidos através do arquivo e depois poder consultar
