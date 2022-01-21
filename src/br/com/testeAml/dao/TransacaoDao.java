@@ -87,7 +87,7 @@ public class TransacaoDao {
     
     public List<Transacao> listarTransacoesSigilosasPorOrgao() throws SQLException{
         List<Transacao> listaTransacao = new ArrayList<>();
-        String consulta = "SELECT idTransacao, orgao, Count(*) FROM transacao where tipoTransacao = 'Sigiloso' group by orgao having Count(*) > 1";
+        String consulta = "SELECT idTransacao, orgao, Count(*) FROM transacao where tipoTransacao = 'Sigiloso' group by orgao having Count(*) > 1 order by Count(*) DESC";
         
         try {
             conexao = FabricaConexao.abrirConexao();
@@ -110,7 +110,7 @@ public class TransacaoDao {
     
     public List<Transacao> listarTransacoesSigilosasPorFavorecido() throws SQLException{
         List<Transacao> listaTransacao = new ArrayList<>();
-        String consulta = "SELECT idTransacao, favorecido, Count(*) FROM transacao group by favorecido having Count(*) > 1";
+        String consulta = "SELECT idTransacao, favorecido, Count(*) FROM transacao group by favorecido having Count(*) > 1 order by Count(*) DESC ";
         
         try {
             conexao = FabricaConexao.abrirConexao();
@@ -136,7 +136,7 @@ public class TransacaoDao {
     
     public List<Transacao> listarTransacoesSaque() throws SQLException{
         List<Transacao> listaTransacao = new ArrayList<>();
-        String consulta = "SELECT idTransacao, portador, orgao, Count(*) FROM transacao WHERE tipoTransacao = 'saque' group by portador having Count(*) > 1";
+        String consulta = "SELECT idTransacao, portador, orgao, Count(*) FROM transacao WHERE tipoTransacao = 'saque' group by portador having Count(*) > 1 order by Count(*) DESC";
         
         try {
             conexao = FabricaConexao.abrirConexao();
