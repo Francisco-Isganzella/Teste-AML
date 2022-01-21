@@ -16,7 +16,6 @@ public class Program {
             }
         });
         
-        //Arquivo.gravarDados();
     }
     
 }

@@ -1,14 +1,17 @@
 
 package br.com.testeAml.application.tela;
 
+import br.com.testeAml.application.util.Arquivo;
 import br.com.testeAml.dao.TransacaoDao;
 import br.com.testeAml.entidade.Transacao;
-import java.awt.Color;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -43,7 +46,11 @@ public class TelaPrincipal extends JFrame{
         labelTituloDados.setFont(new Font("Null", Font.BOLD, 16));
         painelCabecalho.add(labelTituloDados);
         
-        getContentPane().add(painelCabecalho);
+        JButton carregarDadosDoArquivo = new JButton("Carregar arquivos no banco de dados");
+        carregarDadosDoArquivo.setBounds(20, 10, 300, 20);
+        painelCabecalho.add(carregarDadosDoArquivo);
+        
+        
         
         // TABELA DADOS
         DefaultTableModel tabelaModeloDados = new DefaultTableModel();
@@ -91,17 +98,8 @@ public class TelaPrincipal extends JFrame{
         labelValorTotal.setFont(new Font("Null", Font.BOLD, 14));
         painelCorpo.add(labelValorTotal);
         
-        // SOMA TOTAL NO LABEL
-        List<Transacao> listaTransacoes = new ArrayList();
-        TransacaoDao tDao = new TransacaoDao();
-        try {
-            listaTransacoes = tDao.listarTransacoes();
-        } catch (SQLException e) {
-            System.out.println("Erro ao carregar lista de dados " + e.getMessage());
-        }
-        double somaValores = somaValores(listaTransacoes);
         JLabel labelTotal = new JLabel();
-        labelTotal.setText(String.format("R$ %.2f", somaValores));
+        carregarSoma(labelTotal);
         labelTotal.setBounds(750, 3, 90, 30);
         labelTotal.setBorder(BorderFactory.createLoweredBevelBorder());
         painelCorpo.add(labelTotal);
@@ -175,17 +173,8 @@ public class TelaPrincipal extends JFrame{
         labelValorTotalSigilosos.setFont(new Font("Null", Font.BOLD, 14));
         painelRodape.add(labelValorTotalSigilosos);
         
-        // SOMA TOTAL SIGILOSOS NO LABEL
-        List<Transacao> listaTransacoesSigilosas = new ArrayList();
-        TransacaoDao tDaos = new TransacaoDao();
-        try {
-            listaTransacoesSigilosas = tDaos.listarTransacoesSigilosas();
-        } catch (SQLException e) {
-            System.out.println("Erro ao carregar lista de dados " + e.getMessage());
-        }
-        double somaValoresSigilosos = somaValores(listaTransacoesSigilosas);
         JLabel labelTotalSigilosos = new JLabel();
-        labelTotalSigilosos.setText(String.format("R$ %.2f", somaValoresSigilosos));
+        carregarSomaSigilosos(labelTotalSigilosos);
         labelTotalSigilosos.setBounds(300, 3, 90, 30);
         labelTotalSigilosos.setBorder(BorderFactory.createLoweredBevelBorder());
         painelRodape.add(labelTotalSigilosos);
@@ -243,6 +232,23 @@ public class TelaPrincipal extends JFrame{
         
         getContentPane().add(painelRodapeAbaixo);
         
+        
+        carregarDadosDoArquivo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Arquivo.gravarDados();
+                carregarTabelaDados(tabelaModeloDados);
+                carregarTabelaFavorecidos(tabelaModeloDadosFavorecidos);
+                carregarTabelaSaque(tabelaModeloDadosSaques);
+                carregarTabelaSigilosa(tabelaModeloDadosSigilosos);
+                carregarTabelaSigilosaPorOrgao(tabelaModeloDadosSigilososPorOrgao);
+                carregarSoma(labelTotal);
+                carregarSomaSigilosos(labelTotalSigilosos);
+                carregarDadosDoArquivo.setVisible(false);
+            }
+        });
+        
+        getContentPane().add(painelCabecalho);
     }
     
     public static void carregarTabelaDados(DefaultTableModel tabelaModelo){
@@ -332,6 +338,30 @@ public class TelaPrincipal extends JFrame{
             temp += t.getValor();
         }
         return temp;
+    }
+    
+    public static void carregarSoma(JLabel label){
+        List<Transacao> listaTransacoes = new ArrayList();
+        TransacaoDao tDao = new TransacaoDao();
+        try {
+        listaTransacoes = tDao.listarTransacoes();
+        } catch (SQLException e) {
+        System.out.println("Erro ao carregar lista de dados " + e.getMessage());
+        }
+        double somaValores = somaValores(listaTransacoes);
+        label.setText(String.format("R$ %.2f", somaValores));
+    }
+    
+    public static void carregarSomaSigilosos(JLabel label){
+        List<Transacao> listaTransacoes = new ArrayList();
+        TransacaoDao tDao = new TransacaoDao();
+        try {
+        listaTransacoes = tDao.listarTransacoesSigilosas();
+        } catch (SQLException e) {
+        System.out.println("Erro ao carregar lista de dados " + e.getMessage());
+        }
+        double somaValores = somaValores(listaTransacoes);
+        label.setText(String.format("R$ %.2f", somaValores));
     }
     
 }

@@ -15,8 +15,7 @@ public class Arquivo {
     
         
         public static void gravarDados(){
-            //String path = "c:\\Usuários\\franc\\Documentos\\NetBeansProjects\\testeAml\\arquivoCsv\\202110_CPGF.csv";
-            String path = "c:\\temp\\202110_CPGF.csv";
+            String path = "C:\\Users\\franc\\Documents\\NetBeansProjects\\testeAml\\arquivoCsv\\202110_CPGF.csv";
         
             String orgao;
             String portador;
