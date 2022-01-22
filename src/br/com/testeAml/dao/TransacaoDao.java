@@ -157,4 +157,29 @@ public class TransacaoDao {
         }
         return listaTransacao;
     }
+    
+    public List<Transacao> listarTransacoesSigilosasValorPorOrgao(String orgao) throws SQLException{
+        List<Transacao> listaTransacao = new ArrayList<>();
+        String consulta = "SELECT idTransacao, orgao, valor, FROM transacao WHERE orgao = ? and tipoTransacao = 'sigiloso' ";
+        
+        try {
+            conexao = FabricaConexao.abrirConexao();
+            preparando = conexao.prepareStatement(consulta);
+            preparando.setString(1, orgao);
+            resultSet = preparando.executeQuery();
+            while (resultSet.next()) {                
+                Transacao t = new Transacao();
+                t.setIdTransacao(resultSet.getLong("idTransacao"));
+                t.setOrgao(resultSet.getString("orgao"));
+                t.setValor(resultSet.getDouble("valor"));
+                listaTransacao.add(t);
+            }
+        } catch (SQLException e) {
+            System.err.println("Erro ao listar as transacoes de saque " + e.getMessage());
+        } finally {
+            FabricaConexao.fecharConexao(conexao, preparando);
+        }
+        return listaTransacao;
+    }
+    
 }

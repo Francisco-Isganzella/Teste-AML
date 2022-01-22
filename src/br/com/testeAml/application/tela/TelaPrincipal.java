@@ -7,16 +7,21 @@ import br.com.testeAml.entidade.Transacao;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.table.DefaultTableModel;
 
 
@@ -32,6 +37,7 @@ public class TelaPrincipal extends JFrame{
         setLocationRelativeTo(null);
         setLayout(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setTitle("Analise de lavagem de dinheiro");
         setResizable(false);
         
         // PAINEL HEADER
@@ -41,16 +47,54 @@ public class TelaPrincipal extends JFrame{
         painelCabecalho.setVisible(true);
         
         JLabel labelTituloDados = new JLabel();
-        labelTituloDados.setText("Dados de transações do cartão CPGF mês de outubro / 2021");
-        labelTituloDados.setBounds(200, 30, 500, 30);
+        labelTituloDados.setText("Dados de transações do cartão CPGF");
+        labelTituloDados.setBounds(300, 30, 500, 30);
         labelTituloDados.setFont(new Font("Null", Font.BOLD, 16));
         painelCabecalho.add(labelTituloDados);
         
         JButton carregarDadosDoArquivo = new JButton("Carregar arquivos no banco de dados");
-        carregarDadosDoArquivo.setBounds(20, 10, 300, 20);
+        carregarDadosDoArquivo.setBounds(610, 10, 250, 20);
         painelCabecalho.add(carregarDadosDoArquivo);
         
+        JButton procurarArquivoCsv = new JButton("Procurar");
+        procurarArquivoCsv.setBounds(495, 10, 100, 20);
+        painelCabecalho.add(procurarArquivoCsv);
         
+        JLabel labelArquivo = new JLabel();
+        labelArquivo.setText("Arquivo");
+        labelArquivo.setBounds(20, 10, 50, 20);
+        labelArquivo.setFont(new Font("Null", Font.BOLD, 12));
+        painelCabecalho.add(labelArquivo);
+        
+        JTextField campoArquivo = new JTextField();
+        campoArquivo.setBounds(70, 10, 410, 20);
+        campoArquivo.setEnabled(false);
+        painelCabecalho.add(campoArquivo);
+        
+        JLabel labelAguardeCarregando = new JLabel();
+        labelAguardeCarregando.setText("Aguarde, enviando dados...");
+        labelAguardeCarregando.setBounds(600, 10, 300, 20);
+        labelAguardeCarregando.setFont(new Font("Null", Font.BOLD, 16));
+        labelAguardeCarregando.setVisible(false);
+        painelCabecalho.add(labelAguardeCarregando);
+        
+        procurarArquivoCsv.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                FileFilter filter = new FileNameExtensionFilter("filtro", "csv");
+                JFileChooser fc = new JFileChooser();
+                fc.addChoosableFileFilter(filter);
+                fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+                fc.showOpenDialog(carregarDadosDoArquivo);
+                File f = fc.getSelectedFile();
+                campoArquivo.setText(f.getPath());
+                Arquivo.setPath(f.getPath());
+                System.out.println(Arquivo.getPath());
+            }
+        });
+        
+        getContentPane().add(painelCabecalho);
+
         
         // TABELA DADOS
         DefaultTableModel tabelaModeloDados = new DefaultTableModel();
@@ -73,6 +117,13 @@ public class TelaPrincipal extends JFrame{
         carregarTabelaDados(tabelaModeloDados);
         
         getContentPane().add(scrollPaneDados);
+        
+        if (tabelaDados.getRowCount() > 0) {
+            carregarDadosDoArquivo.setVisible(false);
+            labelArquivo.setVisible(false);
+            campoArquivo.setVisible(false);
+            procurarArquivoCsv.setVisible(false);
+        }
         
         // PAINEL BODY
         JPanel painelCorpo = new JPanel();
@@ -135,6 +186,7 @@ public class TelaPrincipal extends JFrame{
         tabelaModeloDadosSigilososPorOrgao.addColumn("Id");
         tabelaModeloDadosSigilososPorOrgao.addColumn("Órgão");
         tabelaModeloDadosSigilososPorOrgao.addColumn("Quantidade transacoes");
+        tabelaModeloDadosSigilososPorOrgao.addColumn("Valor");
         tabelaDadosSigilososPorOrgao.getColumnModel().getColumn(0).setMaxWidth(0);
         tabelaDadosSigilososPorOrgao.getColumnModel().getColumn(0).setMinWidth(0);
         tabelaDadosSigilososPorOrgao.getColumnModel().getColumn(0).setPreferredWidth(0);
@@ -146,8 +198,6 @@ public class TelaPrincipal extends JFrame{
         carregarTabelaSigilosaPorOrgao(tabelaModeloDadosSigilososPorOrgao);
         
         getContentPane().add(scrollPaneDadosSigilososPorOrgao);
-        
-     
         
         // PAINEL FOOTER
         JPanel painelRodape = new JPanel();
@@ -191,6 +241,7 @@ public class TelaPrincipal extends JFrame{
         tabelaModeloDadosSaques.addColumn("Portador");
         tabelaModeloDadosSaques.addColumn("Órgão");
         tabelaModeloDadosSaques.addColumn("Quantidade");
+        tabelaModeloDadosSaques.addColumn("Valor");
         tabelaDadosSaques.getColumnModel().getColumn(0).setMaxWidth(0);
         tabelaDadosSaques.getColumnModel().getColumn(0).setMinWidth(0);
         tabelaDadosSaques.getColumnModel().getColumn(0).setPreferredWidth(0);
@@ -212,6 +263,7 @@ public class TelaPrincipal extends JFrame{
         tabelaModeloDadosFavorecidos.addColumn("Id");
         tabelaModeloDadosFavorecidos.addColumn("Favorecido");
         tabelaModeloDadosFavorecidos.addColumn("Quantidade transacoes");
+        tabelaModeloDadosFavorecidos.addColumn("Valor");
         tabelaDadosFavorecidos.getColumnModel().getColumn(0).setMaxWidth(0);
         tabelaDadosFavorecidos.getColumnModel().getColumn(0).setMinWidth(0);
         tabelaDadosFavorecidos.getColumnModel().getColumn(0).setPreferredWidth(0);
@@ -230,25 +282,41 @@ public class TelaPrincipal extends JFrame{
         painelRodapeAbaixo.setBounds(0, 610, 900, 50);
         painelRodapeAbaixo.setVisible(true);
         
+        JLabel labelTotalSaques = new JLabel();
+        carregaSomaMovimentacoesSaque(labelTotalSaques);
+        labelTotalSaques.setBounds(300, 3, 90, 30);
+        labelTotalSaques.setBorder(BorderFactory.createLoweredBevelBorder());
+        painelRodapeAbaixo.add(labelTotalSaques);
+        
+        JLabel labelValorTotalSaques = new JLabel();
+        labelValorTotalSaques.setText("Total:");
+        labelValorTotalSaques.setBounds(250, 8, 100, 20);
+        labelValorTotalSaques.setFont(new Font("Null", Font.BOLD, 14));
+        painelRodapeAbaixo.add(labelValorTotalSaques);
+        
         getContentPane().add(painelRodapeAbaixo);
         
         
         carregarDadosDoArquivo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Arquivo.gravarDados();
-                carregarTabelaDados(tabelaModeloDados);
-                carregarTabelaFavorecidos(tabelaModeloDadosFavorecidos);
-                carregarTabelaSaque(tabelaModeloDadosSaques);
-                carregarTabelaSigilosa(tabelaModeloDadosSigilosos);
-                carregarTabelaSigilosaPorOrgao(tabelaModeloDadosSigilososPorOrgao);
-                carregarSoma(labelTotal);
-                carregarSomaSigilosos(labelTotalSigilosos);
-                carregarDadosDoArquivo.setVisible(false);
-            }
+        @Override
+        public void actionPerformed(ActionEvent e) {
+            labelAguardeCarregando.setVisible(true);
+            carregarDadosDoArquivo.setVisible(false);
+            Arquivo.gravarDados();
+            carregarTabelaDados(tabelaModeloDados);
+            carregarTabelaFavorecidos(tabelaModeloDadosFavorecidos);
+            carregarTabelaSaque(tabelaModeloDadosSaques);
+            carregarTabelaSigilosa(tabelaModeloDadosSigilosos);
+            carregarTabelaSigilosaPorOrgao(tabelaModeloDadosSigilososPorOrgao);
+            carregarSoma(labelTotal);
+            carregarSomaSigilosos(labelTotalSigilosos);
+            carregaSomaMovimentacoesSaque(labelTotalSaques);
+            labelAguardeCarregando.setVisible(false);
+            labelArquivo.setVisible(false);
+            campoArquivo.setVisible(false);
+            procurarArquivoCsv.setVisible(false);
+        }
         });
-        
-        getContentPane().add(painelCabecalho);
     }
     
     public static void carregarTabelaDados(DefaultTableModel tabelaModelo){
@@ -262,7 +330,7 @@ public class TelaPrincipal extends JFrame{
         }
         if (!listaTransacoes.isEmpty()) {
             for (Transacao t : listaTransacoes) {
-                tabelaModelo.addRow(new Object[]{t.getIdTransacao(), t.getOrgao(), t.getPortador(), t.getFavorecido(), t.getTipoTransacao(), t.getValor()});
+                tabelaModelo.addRow(new Object[]{t.getIdTransacao(), t.getOrgao(), t.getPortador(), t.getFavorecido(), t.getTipoTransacao(), String.format("R$ %.2f", t.getValor())});
             }
         }
     }
@@ -278,7 +346,7 @@ public class TelaPrincipal extends JFrame{
         }
         if (!listaTransacoes.isEmpty()) {
             for (Transacao t : listaTransacoes) {
-                tabelaModelo.addRow(new Object[]{t.getIdTransacao(), t.getOrgao(), t.getValor()});
+                tabelaModelo.addRow(new Object[]{t.getIdTransacao(), t.getOrgao(), String.format("R$ %.2f", t.getValor())});
             }
         }
     }
@@ -294,7 +362,7 @@ public class TelaPrincipal extends JFrame{
         }
         if (!listaTransacoes.isEmpty()) {
             for (Transacao t : listaTransacoes) {
-                tabelaModelo.addRow(new Object[]{t.getIdTransacao(), t.getOrgao(), t.getCount()});
+                tabelaModelo.addRow(new Object[]{t.getIdTransacao(), t.getOrgao(), t.getCount(), String.format("R$ %.2f", somaMovimentacoesSigilosasPorOrgao(t.getOrgao()))});
                 
             }
         }
@@ -311,7 +379,7 @@ public class TelaPrincipal extends JFrame{
         }
         if (!listaTransacoes.isEmpty()) {
             for (Transacao t : listaTransacoes) {
-                tabelaModelo.addRow(new Object[]{t.getIdTransacao(), t.getFavorecido(), t.getCount()});
+                tabelaModelo.addRow(new Object[]{t.getIdTransacao(), t.getFavorecido(), t.getCount(), String.format("R$ %.2f", somaMovimentacoesPorNome(t.getFavorecido()))});
             }
         }
     }
@@ -327,7 +395,7 @@ public class TelaPrincipal extends JFrame{
         }
         if (!listaTransacoes.isEmpty()) {
             for (Transacao t : listaTransacoes) {
-                tabelaModelo.addRow(new Object[]{t.getIdTransacao(), t.getPortador(), t.getOrgao(), t.getCount()});
+                tabelaModelo.addRow(new Object[]{t.getIdTransacao(), t.getPortador(), t.getOrgao(), t.getCount(), String.format("R$ %.2f", somaMovimentacoesSaquePorNome(t.getPortador()))});
             }
         }
     }
@@ -363,5 +431,87 @@ public class TelaPrincipal extends JFrame{
         double somaValores = somaValores(listaTransacoes);
         label.setText(String.format("R$ %.2f", somaValores));
     }
+    
+    public static void carregarValorTotalPorOrgao(String orgao){
+        List<Transacao> listaTransacoes = new ArrayList();
+        TransacaoDao tDao = new TransacaoDao();
+        try {
+            listaTransacoes = tDao.listarTransacoesSigilosasValorPorOrgao(orgao);
+        } catch (SQLException e) {
+            System.out.println("Erro ao carregar tabela de transacoes sigilosas por orgao " + e.getMessage());
+        }
+        for (Transacao t : listaTransacoes) {
+            System.out.println(t);
+        }
+    }
+    
+    public static double somaMovimentacoesSigilosasPorOrgao(String orgao){
+        List<Transacao> listaTransacoes = new ArrayList<>();
+        TransacaoDao tDao = new TransacaoDao();
+        double soma = 0.0;
+        try {
+            listaTransacoes = tDao.listarTransacoes();
+        } catch (SQLException e) {
+            System.out.println("erro " + e.getMessage());
+        }
+        for (Transacao t : listaTransacoes) {
+            if (t.getOrgao().equals(orgao) && t.getTipoTransacao().equals("Sigiloso")) {
+                soma += t.getValor();
+            }
+        }
+        return soma;
+    }
+    
+    public static double somaMovimentacoesSaquePorNome(String nome){
+        List<Transacao> listaTransacoes = new ArrayList<>();
+        TransacaoDao tDao = new TransacaoDao();
+        double soma = 0.0;
+        try {
+            listaTransacoes = tDao.listarTransacoes();
+        } catch (SQLException e) {
+            System.out.println("erro " + e.getMessage());
+        }
+        for (Transacao t : listaTransacoes) {
+            if (t.getPortador().equals(nome) && t.getTipoTransacao().equals("SAQUE")) {
+                soma += t.getValor();
+            }
+        }
+        return soma;
+    }
+    
+    public static double somaMovimentacoesPorNome(String nome){
+        List<Transacao> listaTransacoes = new ArrayList<>();
+        TransacaoDao tDao = new TransacaoDao();
+        double soma = 0.0;
+        try {
+            listaTransacoes = tDao.listarTransacoes();
+        } catch (SQLException e) {
+            System.out.println("erro " + e.getMessage());
+        }
+        for (Transacao t : listaTransacoes) {
+            if (t.getFavorecido().equals(nome)) {
+                soma += t.getValor();
+            }
+        }
+        return soma;
+    }
+    
+    public static void carregaSomaMovimentacoesSaque(JLabel label){
+        List<Transacao> listaTransacoes = new ArrayList<>();
+        TransacaoDao tDao = new TransacaoDao();
+        double soma = 0.0;
+        try {
+            listaTransacoes = tDao.listarTransacoes();
+        } catch (SQLException e) {
+            System.out.println("erro " + e.getMessage());
+        }
+        for (Transacao t : listaTransacoes) {
+            if (t.getTipoTransacao().equals("SAQUE")) {
+                soma += t.getValor();
+            }
+        }
+        label.setText(String.format("R$ %.2f", soma));
+    }
+    
     
 }

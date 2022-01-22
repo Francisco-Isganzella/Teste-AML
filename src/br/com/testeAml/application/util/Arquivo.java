@@ -12,10 +12,11 @@ import java.sql.SQLException;
 
 
 public class Arquivo {
+        private static String path = "";
     
         
         public static void gravarDados(){
-            String path = "C:\\Users\\franc\\Documents\\NetBeansProjects\\testeAml\\arquivoCsv\\202110_CPGF.csv";
+            //String path = "C:\\Users\\franc\\Documents\\NetBeansProjects\\testeAml\\arquivoCsv\\202110_CPGF.csv";
         
             String orgao;
             String portador;
@@ -25,7 +26,7 @@ public class Arquivo {
         
             Transacao dadosTransacoes;
             TransacaoDao tDao = new TransacaoDao();
-            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(path), StandardCharsets.ISO_8859_1))){
+            try (BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(getPath()), StandardCharsets.ISO_8859_1))){
                 br.readLine();
                 String line = br.readLine();
             
@@ -47,9 +48,18 @@ public class Arquivo {
                
                 line = br.readLine();
             }
+            br.close();
         } catch (IOException e) {
             System.out.println("Erro em ler o arquivo: " + e.getMessage());
         }
         }
+
+    public static String getPath() {
+        return path;
+    }
+
+    public static void setPath(String aPath) {
+        path = aPath;
+    }
         
 }
