@@ -2,12 +2,19 @@
 Teste para participar do bootcamp AML 2022
 
 Para executar o programa é necessário fazer download e instalação dos programas abaixo:
+
 Java 11 - https://www.oracle.com/java/technologies/downloads/#java11-windows
+
 IDE NetBeans 12 ou superior - https://netbeans.apache.org/download/index.html
+
 BD MySQL - https://dev.mysql.com/downloads/installer/
 
-É nessessário alterar no código fonte a String "senhaDoBancoDeDadosMySql" na classe "FabricaConexao", para a senha do seu banco de dados MySQL instalado.
-e também alterar a String "path" na classe "Arquivo", para o caminho onde foi clonado o projeto.
+É necessário alterar no código fonte a String "senhaDoBancoDeDadosMySql" na classe "FabricaConexao", para a senha do seu banco de dados MySQL instalado.
+
+Ao executar o programa clique no botão "Pesquisar" e selecione o arquivo csv que contém os dados de gastos do cartão CPGF. Após isso clique no botão "Carregar arquivos no banco de dados."
+
+![header](https://user-images.githubusercontent.com/76000194/150654183-c08534f6-2cc6-40bf-947b-31442b7e1dee.png)
+
 
 Questões
 A – Com suas palavras explique o que é lavagem de dinheiro.
@@ -66,39 +73,43 @@ K (código) – Qual a soma total das movimentações utilizando o CPGF?
 
     R: R$ 5.619.007,95
     
-![valorTotal](https://user-images.githubusercontent.com/76000194/150594203-d9dd53bf-2337-4b6a-a262-5f3b46e2e1e2.jpg)
+![valorTotal](https://user-images.githubusercontent.com/76000194/150653945-ca4aaeb1-4f04-46fc-b984-0ffb901237d9.png)
 
 L (código) – Qual a soma das movimentações sigilosas ?
 
     R: R$ 3.108.731,15
     
-![valorTotalSigilosas](https://user-images.githubusercontent.com/76000194/150594233-2d39af98-ce50-4084-94d8-8c232b891c6b.jpg)
+![valorTotalSigilosas](https://user-images.githubusercontent.com/76000194/150653980-19e02138-c1fe-453d-b033-02c6fbd41900.png)
+
 
 M (código) – Qual o Órgão que mais realizou movimentações sigilosas no período e qual o
 valor (somado)?
 
-    R: Departamento de Policia Federal
+    R: Departamento de Policia Federal, R$ 1.207.131,92. Porém o que realizou o maior valor de movimentações sigilosas foi a Presidencia da República, R$1.699.751,04
     
-![valorTotalSigilosasOrgao](https://user-images.githubusercontent.com/76000194/150594370-0dd51e95-640b-401f-bd2a-289576d8774e.jpg)
+![valorTotalSigilosasPorOrgao](https://user-images.githubusercontent.com/76000194/150654037-a0c387bb-5825-40d7-9da9-441cd64838d8.png)
+
 
 N (código) – Qual o nome do portador que mais realizou saques no período? Qual a soma
 dos saques realizada por ele? Qual o nome do Órgão desse portador?
 
-    R: Rafael Ferreira realizou 25 saques, órgão Instituto Chico Mendes
+    R: Rafael Ferreira realizou 25 saques, órgão Instituto Chico Mendes, R$ 24.520,00
     
-![valorTotalSaquesPortador](https://user-images.githubusercontent.com/76000194/150594673-250c57a6-64c6-4c6c-9d3a-4266d8f80f5f.jpg)
+![valorTotalSaques](https://user-images.githubusercontent.com/76000194/150654062-dbccd6b9-cb4b-42f2-9108-8913ba1c6af4.png)
+
 
 O (código) – Qual o nome do favorecido que mais recebeu compras realizadas utilizando o
 CPGF?
 
-    R: MercadoPago, 123 compras.
+    R: MercadoPago, 123 compras, R$ 60.694,21.
     
-![valorTotalFavorecidos](https://user-images.githubusercontent.com/76000194/150595751-454a6d20-4a16-431c-81db-b99270e74782.jpg)
+![valorTotalFavorecidos](https://user-images.githubusercontent.com/76000194/150654098-a198f6a5-b278-47b6-9567-3376475e7868.png)
+
 
 P - Descreva qual a abordagem utilizada para desenvolver o código para os ítens de K a O.
 
-    R: Utilizei a linguagem de programação Java para desenvolver um programa Desktop que automatiza a leitura do arquivo em formato csv que contém
-    as informações de uso do cartão CPGF e também automatiza as respostas para as perguntas de K a O por meio de uma interface gráfica de facil utilização.
-    Utilizei o método de conexão JDBC com o banco de dados MySQL, para assim poder guardar os dados obtidos através do arquivo e depois poder consultar
+    R: Utilizei a linguagem de programação Java e biblioteca gráfica Swing para desenvolver um programa Desktop que automatiza a leitura do arquivo em formato csv que contém
+    as informações de uso do cartão CPGF, o programa automatiza as respostas para as perguntas de K a O por meio de uma interface gráfica de facil utilização.
+    Utilizei o método de conexão JDBC com o banco de dados MySQL, para assim poder guardar os dados obtidos através do arquivo e depois consultar
     e apresentar na interface os dados já filtrados.
 
